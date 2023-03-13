@@ -1,0 +1,83 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Add Product Movement</title>
+</head>
+<body>
+<div class="all col-md-8 m-5">
+  <h1>Add Product Movement</h1>
+    <form class=" needs-validation m-5" method="POST"   action="{{ url_for('add_product_movement') }}" novalidate>
+        <div class="col-md-3">
+          <label for="validationCustom01" class="form-label">Movement ID:</label>
+          <input type="text" class="form-control" id="validationCustom01" name="movement_id" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+        </div>
+ 
+        <div class="col-md-3">
+          <label for="validationCustom04" class="form-label">From Location:</label>
+          <select class="form-select" id="validationCustom04" name="from_location" >
+            <option selected disabled value="">Choose Location</option>
+            {% for location in locations %}
+            <option value="{{ location.location_id }}">{{ location.location_id }}</option>
+        {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            Please select a valid state.
+          </div>
+        </div>
+
+         <div class="col-md-3">
+          <label for="validationCustom04" class="form-label">To Location:</label>
+          <select class="form-select" id="validationCustom04" name="to_location" >
+            <option selected disabled value="">Choose Location</option>
+            {% for location in locations %}
+            <option value="{{ location.location_id }}">{{ location.location_id }}</option>
+        {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            Please select a valid state.
+          </div>
+        </div>
+
+        <div class="col-md-3">
+            <label for="validationCustom04" class="form-label">Product ID:</label>
+            <select class="form-select" id="validationCustom04" name="product_id" required>
+              <option selected disabled value="">Choose Product</option>
+              {% for product in products %}
+            <option value="{{ product.product_id }}">{{ product.product_id }}</option>
+        {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+              Please select a valid state.
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="validationCustom01" class="form-label">Quantity:</label>
+            <input type="text" class="form-control" id="validationCustom01" name="qty" required>
+            <div class="valid-feedback">
+              Looks good
+            </div>
+          </div>
+     
+        <div class="col-12">
+          <button class="btn btn-primary mt-3" type="submit">Submit form</button>
+        </div>
+      </form>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endwith %}
+</div>
+     
+</body>
+</html>

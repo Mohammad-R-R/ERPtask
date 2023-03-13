@@ -1,0 +1,36 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>View Product Movement</title>
+
+</head>
+<body>
+
+
+
+
+	
+	<table class="table table-dark table-striped">
+		
+
+		<tr>
+			<th>Movement ID</th>
+			<td>{{ product_movement.movement_id }}</td>
+		</tr>
+		<tr>
+			<th>Product Name</th>
+			<td>{{ product_movement.product_id }}</td>
+		</tr>
+		<tr>
+			<th>Quantity</th>
+			<td>{{ product_movement.qty }}</td>
+		</tr>
+		<tr>
+			<th>Timestamp</th>
+			<td>{{ product_movement.timestamp }}</td>
+		</tr>
+	</table>
+</body>
+</html>

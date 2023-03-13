@@ -1,0 +1,60 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Edit Product Movement</title>
+  </head>
+  <body>
+
+    <div class="all m-5 col-md-8 ">
+    <h1>Edit Product Movement</h1>
+    <form method="post" action="{{ url_for('edit_product_movement', movement_id=product_movement.movement_id) }}">
+      <div class="col-md-3">
+      <label >Movement iD: </label>
+      <input type="text" class="form-control" name="movement_id" value="{{ product_movement.movement_id }}" required>
+    </div>
+    <div class="col-md-3">
+      <label for="from_location">From Location:</label>
+      <select class="form-select" name="from_location" >
+        {% for location in locations %}
+            <option value="{{ location.location_id }}" >{{ location.location_id }}</option>
+        
+        {% endfor %}
+      </select>
+    </div>
+    
+    <div class="col-md-3">
+      <label class="form-label"  for="to_location">To Location:</label>
+      <select class="form-select" name="to_location" >
+        {% for location in locations %}
+     
+            <option value="{{ location.location_id }}">{{ location.location_id}}</option>
+        
+        {% endfor %}
+      </select>
+    </div>
+
+      <div class="col-md-3">
+      <label for="product_id">Product ID:</label>
+      <select class="form-select" name="product_id" required>
+        {% for product in products %}
+          {% if product.product_id == product_movement.product_id %}
+            <option value="{{ product.product_id }}" selected>{{ product.product_id }}</option>
+          {% else %}
+            <option value="{{ product.product_id }}">{{ product.product_id }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+      <div class="col-md-3">
+      <label class="form-label" for="qty">Quantity:</label>
+      <input type="number" class="form-control" name="qty" value="{{ product_movement.qty }}" required><br><br>
+    </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Product Balance</title>
+  </head>
+  <body>
+    <h1>Product Balance</h1>
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Location</th>
+        <th>Qty</th>
+      </tr>
+      {% for product, location, qty in balance %}
+      <tr>
+        <td>{{ product }}</td>
+        <td>{{ location }}</td>
+        <td>{{ qty }}</td>
+      </tr>
+    </table>
+  </body>
+</html>

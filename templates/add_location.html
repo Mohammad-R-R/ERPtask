@@ -1,0 +1,27 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Add Location</title>
+  </head>
+  <body>
+    <div class="all col-md-3 m-5">
+    <h1>Add Location</h1>
+    <form method="POST" action="{{ url_for('add_location') }}">
+      <label for="location_id">Location ID:</label>
+      <input class="form-control" type="text" id="location_id" name="location_id"><br>
+      <input type="submit" class="btn btn-primary" value="Add">
+    </form>
+  </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  </body>
+</html>

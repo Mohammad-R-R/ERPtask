@@ -1,0 +1,12 @@
+body{
+    background-image: url('https://rare-gallery.com/uploads/posts/569025-background-brown.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    background-size: 100% 100%;
+    color: white;
+}
+
+.all{
+    background-color: #985738e4;
+    padding: 11px;
+}
