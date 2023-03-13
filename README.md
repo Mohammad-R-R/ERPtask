@@ -39,7 +39,7 @@ here we can do a new movment
 note: validate 
 
 ![image description](photos/eleven.png)
-*** validation example ***
+**validation example**
 
 ![image description](photos/twelve.png)
 
@@ -47,7 +47,7 @@ note: validate
 
 
 ![image description](photos/five.png)
-*** finallay ** : this page shows the report of all movemnts made
+***finallay*** : this page shows the report of all movemnts made
 
 
 
