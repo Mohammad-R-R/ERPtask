@@ -129,15 +129,17 @@ def add_product_movement():
             return redirect(url_for('add_product_movement'))
         from_location = request.form.get('from_location')
         to_location = request.form.get('to_location')
-        if from_location == to_location:
-            flash("can't move from "+from_location+" to "+to_location)
-            return redirect(url_for('add_product_movement'))
+        
         product_id = request.form.get('product_id')
         qty = request.form.get('qty')
 
         # Validate input
         if not movement_id or not from_location or not to_location or not product_id or not qty:
             flash('Please fill in all required fields', 'error')
+            return redirect(url_for('add_product_movement'))
+        
+        if from_location == to_location:
+            flash("can't move from "+from_location+" to "+to_location)
             return redirect(url_for('add_product_movement'))
 
         try:
