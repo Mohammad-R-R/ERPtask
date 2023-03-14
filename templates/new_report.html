@@ -1,0 +1,33 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Product Movement Report</title>
+  </head>
+  <body>
+    <h1>Product Movement Report</h1>
+
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th>Location</th>
+          {% for product in products %}
+            <th>{{ product.product_id }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for location in locations %}
+          <tr>
+            <td>{{ location.location_id }}</td>
+            {% for product in products %}
+              <td>{{ data[location.location_id][product.product_id] }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </body>
+</html>

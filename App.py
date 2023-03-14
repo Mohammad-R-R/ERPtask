@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for,redirect
 from models import db, Product, Location, ProductMovement
-from flask import redirect
 import datetime
 import secrets
 from flask import flash
@@ -127,6 +126,8 @@ def add_product_movement():
         if check_movment:
             flash("this movemnt already done")
             return redirect(url_for('add_product_movement'))
+        timestamp_str= request.form.get('timestamp')
+        timestamp = datetime.datetime.strptime(timestamp_str, '%Y-%m-%d')
         from_location = request.form.get('from_location')
         to_location = request.form.get('to_location')
         
@@ -134,7 +135,7 @@ def add_product_movement():
         qty = request.form.get('qty')
 
         # Validate input
-        if not movement_id or not from_location or not to_location or not product_id or not qty:
+        if not movement_id or not to_location or not product_id or not qty:
             flash('Please fill in all required fields', 'error')
             return redirect(url_for('add_product_movement'))
         
@@ -152,7 +153,7 @@ def add_product_movement():
 
         # Add product movement to database
         product_movement = ProductMovement(movement_id=movement_id, from_location=from_location,
-                                           to_location=to_location, product_id=product_id, qty=qty)
+                                           to_location=to_location, product_id=product_id, qty=qty,timestamp=timestamp)
         db.session.add(product_movement)
         db.session.commit()
 
@@ -180,6 +181,8 @@ def edit_product_movement(movement_id):
         product_movement.to_location = request.form['to_location']
         product_movement.product_id = request.form['product_id']
         product_movement.qty = request.form['qty']
+        timestamp_str= request.form.get('timestamp')
+        product_movement.timestamp = datetime.datetime.strptime(timestamp_str, '%Y-%m-%d')
 
         if not product_movement.movement_id or not product_movement.from_location or not product_movement.to_location or not product_movement.product_id or not product_movement.qty:
             flash('Please fill in all required fields', 'error')
@@ -207,22 +210,39 @@ def view_product_movement(movement_id):
 
 
 
+
+
 @app.route('/report', methods=['GET'])
 def view_report():
-    locations = Location.query.all()
-    products = Product.query.all()
 
-    data = []
-    for product in products:
-        for location in locations:
-            movements = ProductMovement.query.filter_by(product_id=product.product_id, to_location=location.location_id).all()
-            total_in = sum(m.qty for m in movements)
-            movements = ProductMovement.query.filter_by(product_id=product.product_id, from_location=location.location_id).all()
-            total_out = sum(m.qty for m in movements)
-            balance = total_in - total_out
-            data.append((product.product_id, location.location_id, balance))
+    # in this function I didn't count on the order we had so whatever data be inserted will be handled 
+    movements = db.session.query(
+        ProductMovement.to_location,
+        ProductMovement.product_id,
+        db.func.sum(ProductMovement.qty).label('total_in')
+    ).join(Product, Product.product_id == ProductMovement.product_id)\
+    .join(Location, Location.location_id == ProductMovement.to_location)\
+    .group_by(ProductMovement.to_location, ProductMovement.product_id).all()
 
-    return render_template('report.html', data=data)
+    data = {}
+    products = set()
+    locations = set()
+    for movement in movements:
+        location_id = movement.to_location
+        product_id = movement.product_id
+        total_in = movement.total_in
+        products.add((product_id, Product.query.get(product_id).product_id))
+        locations.add((location_id, Location.query.get(location_id).location_id))
+        if location_id not in data:
+            data[location_id] = {}
+        data[location_id][product_id] = total_in
+
+    return render_template('report.html', data=data, products=products, locations=locations)
+
+
+
+
+   
 
 
 @app.route('/delete_product/<product_id>')
@@ -231,7 +251,48 @@ def delete(product_id):
     db.session.delete(product)
     db.session.commit()
 
-    return redirect(url_for('products')) 
+
+@app.route('/report_new', methods=['GET'])
+def view_report2():
+    
+        # Fetch all locations and products
+        locations = Location.query.all()
+        products = Product.query.all()
+
+        # Create a dictionary to store the data
+        data = {}
+
+        # Query the ProductMovement table using a join
+        movements = db.session.query(
+            ProductMovement.to_location,
+            ProductMovement.product_id,
+            db.func.sum(ProductMovement.qty).label('total_in')
+        ).group_by(ProductMovement.to_location, ProductMovement.product_id).all()
+
+        # Populate the data dictionary
+        for location in locations:
+            location_data = {}
+            for product in products:
+                total_in = next((m.total_in for m in movements if m.to_location == location.location_id and m.product_id == product.product_id), 0)
+                location_data[product.product_id] = total_in
+            data[location.location_id] = location_data
+
+        # Render the template with the data and metadata
+        return render_template('new_report.html', data=data, products=products, locations=locations)
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 

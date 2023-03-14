@@ -16,6 +16,11 @@
       <input type="text" class="form-control" name="movement_id" value="{{ product_movement.movement_id }}" required>
     </div>
     <div class="col-md-3">
+      <label >timestamp: </label>
+      <input type="date" class="form-control" name="timestamp" value="{{ product_movement.timestamp }}" required>
+      <label>{{ product_movement.timestamp }} </label>
+    </div>
+    <div class="col-md-3">
       <label for="from_location">From Location:</label>
       <select class="form-select" name="from_location" >
         {% for location in locations %}

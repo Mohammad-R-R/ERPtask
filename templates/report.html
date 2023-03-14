@@ -3,25 +3,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Inventory Report</title>
+	<title>Product Movement Report</title>
 
 </head>
 <body>
-
-	<table class="table table-dark table-striped">
+	<h1>Product Movement Report</h1>
+	<table class="table table-dark">
 		<thead>
 			<tr>
-				<th class="table-dark">Product ID</th>
-				<th class="table-dark">Location ID</th>
-				<th class="table-dark">Balance</th>
+				<th>Location</th>
+				{% for product in products %}
+					<th>{{ product[1] }}</th>
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
-			{% for row in data %}
+			{% for location in locations %}
 				<tr>
-					<td class="table-dark">{{ row[0] }}</td>
-					<td class="table-dark">{{ row[1] }}</td>
-					<td class="table-dark" >{{ row[2] }}</td>
+					<td>{{ location[1] }}</td>
+					{% for product in products %}
+						<td>{{ data.get(location[0], {}).get(product[0], 0) }}</td>
+					{% endfor %}
 				</tr>
 			{% endfor %}
 		</tbody>
