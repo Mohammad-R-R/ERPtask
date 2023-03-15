@@ -240,7 +240,22 @@ def view_report():
     return render_template('report.html', data=data, products=products, locations=locations)
 
 
+@app.route('/old_report', methods=['GET'])
+def old_view_report():
+    locations = Location.query.all()
+    products = Product.query.all()
 
+    data = []
+    for product in products:
+        for location in locations:
+            movements = ProductMovement.query.filter_by(product_id=product.product_id, to_location=location.location_id).all()
+            total_in = sum(m.qty for m in movements)
+            movements = ProductMovement.query.filter_by(product_id=product.product_id, from_location=location.location_id).all()
+            total_out = sum(m.qty for m in movements)
+            balance = total_in - total_out
+            data.append((product.product_id, location.location_id, balance))
+
+    return render_template('old_report.html', data=data)
 
    
 

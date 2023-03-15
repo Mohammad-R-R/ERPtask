@@ -1,0 +1,30 @@
+{% include "index.html" %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Inventory Report</title>
+
+</head>
+<body>
+
+	<table class="table table-dark table-striped">
+		<thead>
+			<tr>
+				<th class="table-dark">Product ID</th>
+				<th class="table-dark">Location ID</th>
+				<th class="table-dark">Balance</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for row in data %}
+				<tr>
+					<td class="table-dark">{{ row[0] }}</td>
+					<td class="table-dark">{{ row[1] }}</td>
+					<td class="table-dark" >{{ row[2] }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</body>
+</html>
