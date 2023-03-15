@@ -42,8 +42,13 @@ note: validate
 **validation example**
 
 ![image description](photos/twelve.png)
+--------------------
 
-
+![image description](photos/final1.png)
+**arranged** : this report shows the table depnding on the product table and location table 
+-----------------------------------------
+![image description](photos/final2.png)
+**but** this report shows the table depnding on the product movments
 
 
 ![image description](photos/five.png)
